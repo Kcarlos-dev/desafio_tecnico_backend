@@ -14,15 +14,16 @@ class ProductController extends Controller
         $this->objProduct = new Product();
     }
 
-    public function index()
+/*    public function index()
     {
      $produtos = \App\Models\Product::all();
      return view('produtos', ['produtos' => $produtos] );
-    } 
+    } */
 
    public function listar()
    {
-    $produtos = \App\Models\Product::all();
+    $produtos = \App\Models\Product::with('category')->get();
+
     return view('produtos', ['produtos' => $produtos] );
    }
 
@@ -32,7 +33,14 @@ class ProductController extends Controller
     return view('produtos.create', ['categories' => $categories]);
    }
    public function store(ProductRequest $request)
-   {
+   {    
+       $data = \App\Models\Product::all(); 
+       $msg = 'Existe um produto com esse nome';
+       foreach($data as $i){
+            if($i->name == $request->name){
+                return view('alertas.equal', ['tipo' => $msg,'rota' => 'produtos/listar']);
+            }
+       }
        $product= $this->objProduct->create([
            'name'=>$request->name,
            'slug'=> str_slug($request->name),

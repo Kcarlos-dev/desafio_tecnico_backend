@@ -12,10 +12,10 @@ class CategoryController extends Controller
     public function __construct(){
         $this->objCategory = new Category();
     }
-    public function index()
+/*    public function index()
     {
      return view('categorias-cadastrar', ['categories' => $categories] );
-    }
+    }*/
 
     public function listar()
     {
@@ -30,6 +30,13 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
+        $data = \App\Models\Category::all();
+        $msg = 'Categoria já existente';
+        foreach($data as $i){
+            if($i->name == $request->name){
+                return view('alertas.equal', ['tipo' => $msg,'rota' => 'categorias/listar']);
+            }
+       }
         $category= $this->objCategory->create([
             'name'=>$request->name,
             'slug'=> str_slug($request->name),
@@ -53,12 +60,12 @@ class CategoryController extends Controller
             'slug'=> str_slug($request->name),
             'description'=>$request->description
         ]);
-        return redirect('produtos/listar');
+        return redirect('categorias/listar');
     }
  
     public function destroy($id)
     {
         $category = $this->objCategory->find($id)->delete();
-        return redirect('produtos/listar')->with('msg', 'Categoria excluída com sucesso.');
+        return redirect('categorias/listar')->with('msg', 'Categoria excluída com sucesso.');
     }
 }

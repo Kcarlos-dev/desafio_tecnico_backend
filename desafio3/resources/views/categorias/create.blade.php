@@ -3,7 +3,7 @@
 @section('conteudo')
 <br>
     <div class="col-8 m-auto">
-      <form name="formCard" id="formCard" method="GET" action="{{url('categorias/listar')}}">
+      <form name="formCard" id="formCard" method="POST" action="{{url('categorias/listar')}}">
       {!! csrf_field() !!}
             <fieldset>
               <legend> Categorias - Cadastrar</legend>
